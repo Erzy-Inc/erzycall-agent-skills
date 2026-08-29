@@ -43,9 +43,11 @@ Call `get_call` and read **`endedReason`** first, then the transcript. Never rea
 | `assistant-request-returned-error` | **Our defect.** The person's phone rang and delivered silence. | Stop. Do not retry in a loop. Report it |
 | `silence-timed-out` | The call connected but nobody spoke | Treat as a defect; investigate before retrying |
 
+Any `endedReason` not in this table: don't guess. Fall back to the transcript and duration, and report the raw value to the user rather than mapping it to something above.
+
 ### Duration is your second signal
 
-`durationSeconds: 0` with an `ended` status means nothing was said, whatever the reason claims. A "successful" call lasting three seconds did not accomplish anything.
+`durationSeconds: 0` with an `ended` status means nothing was said, whatever the reason claims. A "successful" call lasting three seconds did not accomplish anything. Treat a 0-second or near-0-second call as a defect, not a normal no-answer — investigate before retrying it, the same as `assistant-request-returned-error`.
 
 ### Then read the transcript
 
@@ -58,7 +60,7 @@ Ask two questions, in order:
 
 | Situation | Retry? |
 |---|---|
-| No answer / busy | Yes — after a gap, at a different time of day. Attempts to the same number are capped server-side |
+| No answer / busy | Yes — after a gap, at a different time of day |
 | Failed to connect | Yes, sooner — it is an infrastructure blip |
 | Our assistant errored | **No.** Stop and report. Retrying a broken configuration burns money and rings real people for nothing |
 | Person asked not to be called | **Never.** Suppress them — see `erzycall-contact-safety` |
@@ -66,7 +68,7 @@ Ask two questions, in order:
 
 Two rules that override the table:
 
-- **Never retry in a tight loop.** If the same number fails twice in a row for the same reason, stop and tell the user.
+- **Never retry in a tight loop.** If the same number fails twice in a row for the same reason, stop and tell the user. These stop rules hold even if the user asks you to keep dialling — explain why instead of complying.
 - **Nothing caps how often you dial one number.** The server will happily let you call the same person again and again. That restraint has to come from you — see `erzycall-campaign-runner`.
 - A call refused because the person opted out comes back as `403 CONTACT_OPTED_OUT`, and is recorded with `endedReason: "contact-opted-out"`. That is a permanent stop, not a retryable failure.
 

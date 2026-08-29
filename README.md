@@ -52,7 +52,7 @@ A skill is guidance. It shapes a cooperative agent; it cannot stop a careless on
 | Refusing to call someone who opted out | **Yes** — `403 CONTACT_OPTED_OUT`, no bypass, matched on the number so a fresh contact row is not a clean slate |
 | Blocking already-queued calls when an opt-out lands | **Yes** — caught at dispatch |
 | Noticing that someone asked to stop, and recording it | **No** — this is the agent's job. It is the single most important action in `erzycall-contact-safety` |
-| How often one number may be dialled | **Proposed, not shipped** — see the open PR on `erzycall-app` |
+| How often one number may be dialled | **Proposed platform feature, not yet shipped** |
 | Spend ceilings | **No** — advisory only today |
 
 Where a skill says "the server will refuse," it will. Where it says restraint is your responsibility, nothing is watching.

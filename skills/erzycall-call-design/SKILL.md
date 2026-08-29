@@ -5,7 +5,7 @@ description: Use when writing the opening message or script for an ErzyCall outb
 
 # Writing a call that works
 
-Connecting is easy. Being understood in the first five seconds is the hard part, and it's where most calls are lost. Everything here comes from real transcripts on this platform.
+Connecting is easy. Being understood in the first five seconds is the hard part, and it's where most calls are lost. Everything here comes from real transcripts on this platform — names, businesses, and identifying details below are anonymized.
 
 ## The first sentence decides the call
 
@@ -17,17 +17,17 @@ The opening must do three things, in this order:
 2. **Why** — the specific reason, not a category
 3. **What you need** — one question
 
-> "Hi, this is Lillian calling from Music Hive about Alexander's piano lesson on Tuesday. Is now an okay time?"
+> "Hi, this is Priya calling from Northside Music School about Daniel's piano lesson on Tuesday. Is now an okay time?"
 
 ### What kills calls, taken from real transcripts
 
 **Filler and fragments.** This actually went out:
 
-> *"Hi Alexander, um. This. Is Lillian…"*
+> *"Hi Daniel, um. This. Is Priya…"*
 
 The parent replied *"Um. For what?"* — and that call was already over. Never put `um`, `uh`, or a trailing pause in a written opening. Write clean sentences; the voice adds its own naturalness.
 
-**Talking to the wrong person by name.** Calling a parent by the child's name reads as a mail-merge. Be explicit about whose name is whose: *"Alexander's lesson"*, not *"Hi Alexander"* when you're calling their mother.
+**Talking to the wrong person by name.** Calling a parent by the child's name reads as a mail-merge. Be explicit about whose name is whose: *"Daniel's lesson"*, not *"Hi Daniel"* when you're calling their mother.
 
 **Names you can't pronounce.** A mangled name is worse than no name. If you're unsure, use the surname with a title, or drop the name and lead with the reason.
 
