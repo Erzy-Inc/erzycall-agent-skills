@@ -18,6 +18,8 @@ It gives you the plan, the minutes balance, minutes used this period, and how ma
 
 If `get_usage` returns a scope error, the connection was set up before this capability existed. Tell the user to reconnect the ErzyCall connector — it is a one-time reconnect, not a bug in their account.
 
+**"How much do I have left" is not always a single subtraction.** On a standard subscription period, minutes left is the plan's minute allowance minus `deductedMins`. On a trial or a rolling 30-day window (`period.source` says which), or on a complimentary plan where most calls count toward `totalMins` but aren't deducted, there may be no one field that gives you the remaining number directly. If you cannot compute a specific figure from the fields `get_usage` returns, say so plainly — *"I can see your plan and usage type, but not an exact minutes-remaining number for this period"* — rather than stating a number you inferred.
+
 ## Estimate before you dial
 
 Do the arithmetic out loud, in the plan you show the user. It takes one line and it routinely changes their mind.
@@ -39,6 +41,8 @@ So a 100-person list is not 100 calls' worth of minutes — but it is also not f
 > This list is 87 people. Realistically that's around 25 conversations and roughly 50 minutes. You have 61 minutes left and 9 days in the period. It fits, but it uses most of what's left.
 
 If the estimate exceeds the balance, **stop and ask** — do not start and hope. Offer the useful options: run part of the list now, prioritise a segment, or top up first.
+
+If the user pushes past the warning without picking one of those options — "just start it, we'll figure it out" — the ceiling defaults to the remaining balance, never the full request. Say that explicitly rather than assuming it: *"I'll run it until the balance runs out, then stop and tell you what's left."*
 
 ## Set a stop rule before starting
 
