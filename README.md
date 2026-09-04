@@ -6,6 +6,36 @@ The MCP server describes *what* it can do — 31 tools, self-describing schemas.
 
 These skills are that policy.
 
+## Quickstart
+
+Connect an agent to the ErzyCall MCP server, place one real call, and read the result correctly. Five minutes, assuming your organization already has a phone number assigned.
+
+**1. Connect.**
+
+| Field | Value |
+|---|---|
+| Server URL | `https://app.erzycall.com/api/mcp` |
+| Transport | Streamable HTTP |
+| Authentication | OAuth 2.1 (PKCE + Dynamic Client Registration) — no API key, no headers |
+
+Claude Code:
+
+```
+claude mcp add --transport http erzycall https://app.erzycall.com/api/mcp
+claude mcp login erzycall
+claude mcp list   # want ✔ Connected next to erzycall
+```
+
+Claude (chat), ChatGPT, Cursor, VS Code, Zed, Windsurf/Devin, n8n, Make, Zapier: per-client setup is at [app.erzycall.com/docs/mcp](https://app.erzycall.com/docs/mcp).
+
+**2. Confirm the connection before touching anything.** Ask the agent: *"Confirm ErzyCall is connected, which organization, and whether it has a phone number available. Don't place a call."* It should answer without dialling.
+
+**3. Place one real call.** Give the agent a destination number, what to say, and a way to check whether it worked — then approve when it asks. The agent should ask for confirmation before dialling; if it doesn't, that's a bug in whatever's driving it, not expected behavior.
+
+**4. Read the result correctly.** `status: "ended"` only means the call is over, not that it succeeded. Read `endedReason`, then the transcript, before deciding — that's what `erzycall-call-outcomes` below encodes.
+
+That loop is the whole quickstart. Pacing a list of contacts, respecting opt-outs, and staying inside budget are what the rest of these skills are for.
+
 ## The problem they solve
 
 Across the last 150 real calls on the platform:
@@ -35,13 +65,7 @@ Read them in that order. The first two matter most.
 
 Each skill is a single `SKILL.md` with YAML frontmatter, in the format most agent harnesses read. Point your agent at this repo, or copy the directories into wherever your harness loads skills from.
 
-They assume the agent is connected to the ErzyCall MCP:
-
-```
-https://app.erzycall.com/api/mcp
-```
-
-OAuth, no API key. Setup per client: https://app.erzycall.com/docs/mcp
+They assume the agent is already connected to the ErzyCall MCP server — see Quickstart above if it isn't yet.
 
 ## What is enforced vs advised
 
@@ -59,6 +83,6 @@ Where a skill says "the server will refuse," it will. Where it says restraint is
 
 ## Status
 
-Written 2026-08-23/24, from real call transcripts and production failure data. Not yet validated against agents in the wild — the intended next step is adversarial testing: give a fresh agent a goal plus a skill, watch where it still does the wrong thing, fix the skill.
+Written 2026-08-23/24, from real call transcripts and production failure data. Field names and error codes were checked against what is actually deployed, not against what was planned.
 
-Field names and error codes were checked against what is actually deployed, not against what was planned.
+Adversarially validated across two rounds of fresh-agent testing — an agent given only a skill and a scenario, including scenarios where the user pushes back or repeats a request the skill says to refuse. All five skills held up under pressure. Findings from both rounds are folded into the current text: anonymized example transcripts, an inaccurate retry-cap claim removed, and sixteen gaps closed in how the rules survive a user who doesn't take no for an answer.
