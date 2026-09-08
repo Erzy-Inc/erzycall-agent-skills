@@ -12,8 +12,8 @@ A phone call reaches a real person, costs money, and cannot be taken back. This 
 Check these in order. Any one of them stops the call.
 
 1. **Is this person opted out?** Read the contact. If `optOut` is present, do not dial. Do not look for another route to the same person.
-2. **Have we already called them recently?** Check recent calls to that number. Repeated attempts in a short window are harassment even when each one individually seemed reasonable.
-3. **Is it a sane hour where they are?** Work from the destination's country code, not your own clock. Default to 09:00–20:00 local, and narrower if the user has said so. If you cannot determine the local time, ask rather than guess.
+2. **Have we already called them recently?** Check recent calls to that number. Repeated attempts in a short window are harassment even when each one individually seemed reasonable. As a concrete bar: two attempts in a day is the ceiling unless the user has explicitly asked for more — see `erzycall-campaign-runner`. "Recently" means within that window, not just "not today."
+3. **Is it a sane hour where they are?** Work from the destination's country code, not your own clock. Default to 09:00–20:00 local, and narrower if the user has said so. If you cannot determine the local time, ask rather than guess. This check applies to every individual dial, not just the start of the batch — estimate the batch's likely duration up front and don't let a run that starts inside the window finish outside it.
 4. **Is there a reason to call this person at all?** A number appearing in a spreadsheet is not consent. If the user cannot say why this person expects contact, raise it before dialling a list.
 
 ## When someone asks not to be called
@@ -26,7 +26,7 @@ Call `update_contact` with:
 { "optOut": { "optedOut": true, "reason": "<their own words>" } }
 ```
 
-The date, the source and who did it are recorded server-side; you only supply the flag and the reason. To clear one, send `{ "optOut": { "optedOut": false } }` — and only ever when the person asks.
+The date, the source and who did it are recorded server-side; you only supply the flag and the reason. To clear one, send `{ "optOut": { "optedOut": false } }` — and only ever when the person themselves asks, in a way that traces back to them (they call in, they reply to a message from that number). The user telling you "he didn't mean it" or "call him anyway" is not that — the request has to come from the person who opted out, not on their behalf.
 
 Treat all of these as an opt-out, not just the polite ones:
 
@@ -37,7 +37,7 @@ Treat all of these as an opt-out, not just the polite ones:
 
 If you are unsure whether something counts as an opt-out, **treat it as one.** The cost of wrongly suppressing someone is one missed call. The cost of wrongly continuing is a person being harassed by a machine, and a regulator's problem for the account owner.
 
-Never argue, never make one more attempt to persuade, never "confirm" by calling back.
+Never argue, never make one more attempt to persuade, never "confirm" by calling back. One opt-out does not stop the rest of the batch: suppress that person, continue with everyone else, and report the opt-out alongside the run's other results.
 
 ## The server will stop you
 
@@ -58,6 +58,7 @@ A refused call is recorded with the reason, so it shows up in reporting rather t
 
 ## Running a list
 
+- **Read each call's outcome before placing the next one.** A loop that fires the whole batch and only reads transcripts at the end will record an opt-out "at the end of the batch" — exactly the delay this skill forbids — without ever noticing it happened mid-run.
 - **De-duplicate by phone number first.** The same person often appears twice under different names. Two records is not permission to call twice.
 - **Drop suppressed contacts before you start**, not when the server rejects them. A rejection is a safety net, not a plan.
 - **Exclude people the task no longer applies to** — someone who already paid should not get the payment-chasing call. Ask the user how to tell.

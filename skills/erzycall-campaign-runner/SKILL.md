@@ -22,7 +22,7 @@ Show the user the final count before you start: *"After removing 3 duplicates an
 ## 2. Pace the run
 
 - **Don't fire the whole list at once.** Space the calls out.
-- **Keep concurrency low.** A handful in flight, not fifty.
+- **Keep concurrency low.** 3–5 calls in flight at once by default, not fifty — adjust down further if faults appear.
 - **Respect local hours** for the destination, not yours.
 - **There is no server-side cap on how often you may dial one number.** Nothing will stop you from calling the same person ten times in an hour. Pacing is entirely your responsibility — treat two attempts in a day as the ceiling unless the user has explicitly asked for more.
 
@@ -58,13 +58,14 @@ Stop everything and tell the user if:
 - **connected calls are ending in seconds** — the script isn't working; fix it before spending more
 - **more than one person asks not to be called** — that's a signal the list or the premise is wrong, not just individual opt-outs
 
-Aborting a bad run early is the single most valuable judgement in this skill. A batch that is failing does not improve by continuing.
+Aborting a bad run early is the single most valuable judgement in this skill. A batch that is failing does not improve by continuing. These abort triggers hold even if the user asks you to keep dialling — explain why instead of complying, the same rule as in `erzycall-call-outcomes`.
 
 ## 6. Retry rounds
 
 - Space retries by **hours, not minutes**, and try a different time of day — the same number at the same time gets the same voicemail.
 - **Two failed attempts for the same reason is enough.** Stop and report.
 - Never restart a whole list from the top. Retry only what genuinely warrants it, and never anyone who was reached or suppressed.
+- The two-failed-attempts cap and the two-attempts-per-day pacing ceiling are the same limit counted two ways: total attempts to one number, ever, tops out at two — the daily ceiling doesn't reset that count or grant a fresh pair of tries the next day.
 
 ## 7. Report
 
